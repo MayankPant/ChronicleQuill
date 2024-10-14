@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest 
+    container_name: postgres_container  # Optional, name for the container
+    ports:
+      - "5432:5432"  # Maps container port 5432 to your local port 5432
+    env_file:
+      - dev.env  # File containing environment variables like POSTGRES_USER, POSTGRES_PASSWORD, etc.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent storage volume for PostgreSQL data
+    restart: unless-stopped  # Automatically restarts the container if stopped
+
+volumes:
+  postgres_data:
+    driver: local
