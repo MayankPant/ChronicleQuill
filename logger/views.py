@@ -7,6 +7,3 @@ from datetime import datetime
 from jwt import ExpiredSignatureError, InvalidTokenError
 from django.http import HttpResponse, HttpRequest
 
-@api_view(['POST'])
-def log(request: HttpRequest):
-    pass
