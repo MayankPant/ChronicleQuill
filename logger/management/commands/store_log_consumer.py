@@ -22,7 +22,7 @@ class Command(BaseCommand):
     
     
     def handle(self, *args, **kwargs):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.3', credentials=credentials))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.4', credentials=credentials))
         channel = connection.channel()
         # Declare the fanout exchange and bind to a queue
 
@@ -45,4 +45,3 @@ class Command(BaseCommand):
         channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=False)
         print(' [*] Waiting for logs to store in DB. To exit press CTRL+C')
         channel.start_consuming()    
-    

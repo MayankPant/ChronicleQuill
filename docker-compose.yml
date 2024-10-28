@@ -22,8 +22,20 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
       - rabbitmq_log:/var/log/rabbitmq
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    ports:
+      - "6379:6379"  # Redis default port
+    volumes:
+      - redis_data:/data  # Persistent storage volume for Redis data
+    restart: unless-stopped  # Automatically restart Redis if stopped
+
 volumes:
   rabbitmq_data:
   rabbitmq_log:
   postgres_data:
+    driver: local
+  redis_data:
     driver: local
