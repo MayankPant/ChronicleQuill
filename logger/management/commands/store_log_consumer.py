@@ -22,12 +22,14 @@ class Command(BaseCommand):
     
     
     def handle(self, *args, **kwargs):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.4', credentials=credentials))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.3', credentials=credentials))
         channel = connection.channel()
         # Declare the fanout exchange and bind to a queue
 
         result = channel.queue_declare(queue='', exclusive=True) # auto delete queue when consumer not in use
         queue_name = result.method.queue
+        # just in case the exchange is not declared
+        channel.exchange_declare(exchange='logs_exchange', exchange_type='fanout')
         channel.queue_bind(exchange='logs_exchange', queue=queue_name)
         
         def callback(ch, method, properties, body):

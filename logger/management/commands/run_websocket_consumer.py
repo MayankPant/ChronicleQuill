@@ -20,11 +20,14 @@ class Command(BaseCommand):
     help = 'Run the websocket consumer that sends logs to the frontend'
 
     def handle(self, *args, **kwargs):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.4', credentials=credentials))
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.3', credentials=credentials))
         channel = connection.channel()
 
         result = channel.queue_declare(queue='', exclusive=True)
         queue_name = result.method.queue
+        
+         # just in case the exchange is not declared
+        channel.exchange_declare(exchange='logs_exchange', exchange_type='fanout')
         channel.queue_bind(exchange='logs_exchange', queue=queue_name)
 
         def callback(ch, method, properties, body):
