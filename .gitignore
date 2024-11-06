@@ -3,4 +3,4 @@ venv/
 logger/migrations/__pycache__/
 ChronicleQuill/__pycache__/
 logger/__pycache__/
-logger/management/commands/__pycache__/*
+logger/management/commands/__pycache__/

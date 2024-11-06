@@ -22,7 +22,9 @@ class Command(BaseCommand):
     
     
     def handle(self, *args, **kwargs):
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='172.18.0.3', credentials=credentials))
+        # hearbeat defines how long the channel stays open after staying idle and no data transfer
+
+        connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=600, host='rabbitmq', credentials=credentials))
         channel = connection.channel()
         # Declare the fanout exchange and bind to a queue
 

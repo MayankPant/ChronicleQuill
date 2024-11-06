@@ -1,10 +1,25 @@
 version: '3.8'
 services:
+  chroniclequill:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
+    depends_on:
+      - redis
+      - rabbitmq
+      - postgres
+    command: >
+      sh -c "python3 manage.py store_log_consumer &&
+             python3 manage.py run_websocket_consumer"
+    entrypoint: ['./entrypoint.sh']
+    container_name: chroniclequill
   postgres:
     image: postgres:latest 
     container_name: postgres_container  # Optional, name for the container
     ports:
-      - "5431:5432"  # Maps container port 5432 to your local port 5432
+      - "5431:5432"  # Maps container port 5432 to your local port 5431
     env_file:
       - dev.env  # File containing environment variables like POSTGRES_USER, POSTGRES_PASSWORD, etc.
     volumes:
