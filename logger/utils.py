@@ -1,6 +1,12 @@
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+
+LOG_DB_NAME: str = 'logdb'
+    
+        
+
+
 def send_logs(message: str, service_name: str):
     
     """
@@ -17,3 +23,19 @@ def send_logs(message: str, service_name: str):
         }
     )
     print(f'Sent logs to message hanlder')
+    
+def send_batches(batch_size=10):
+    
+    """
+    sends a batch of logs to the frontend
+    
+    """
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'service_logger',
+        {
+            'type': 'send_log_batches',
+            'batch_size': batch_size
+        }
+    )
+    print(f'Sent logs to service message hanlder')

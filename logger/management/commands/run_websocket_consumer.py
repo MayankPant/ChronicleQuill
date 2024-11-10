@@ -1,8 +1,10 @@
 from django.core.management.base import BaseCommand
 import pika
 import json
-from ...utils import send_logs
+from ...utils import LOG_DB_NAME, send_logs, send_batches
 import environ
+from ...LogMemory import insert
+
 env = environ.Env(
     DEBUG=(bool, False)
 )
@@ -20,6 +22,7 @@ class Command(BaseCommand):
     help = 'Run the websocket consumer that sends logs to the frontend'
 
     def handle(self, *args, **kwargs):
+        print(f'Entered the websocket consumer handler')
         # hearbeat defines how long the channel stays open after staying idle and no data transfer
         connection = pika.BlockingConnection(pika.ConnectionParameters(heartbeat=600, host='rabbitmq', credentials=credentials))
         channel = connection.channel()
@@ -34,8 +37,10 @@ class Command(BaseCommand):
         def callback(ch, method, properties, body):
             log_data = json.loads(body)
             print(f"\n\n\n\nlog Data: {log_data}")
+            insert(body, LOG_DB_NAME)
             # Send the log data via a Django Channels websocket connection
             send_logs(json.dumps(log_data), log_data['service'])
+            send_batches()
             ch.basic_ack(delivery_tag = method.delivery_tag)
             print(f"Sent log to websocket: {log_data}")
 

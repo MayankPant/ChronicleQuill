@@ -10,9 +10,6 @@ services:
       - redis
       - rabbitmq
       - postgres
-    command: >
-      sh -c "python3 manage.py store_log_consumer &&
-             python3 manage.py run_websocket_consumer"
     entrypoint: ['./entrypoint.sh']
     container_name: chroniclequill
   postgres:
