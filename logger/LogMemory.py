@@ -45,6 +45,19 @@ def retrieve_all(dequeue_name: str, batch_size: int = None):
 
 def get_length(dequeue_name: str) -> int:
     return redis_client.llen(dequeue_name)
+
+def set_key(key_name, value):
+    """
+    sets a key value pair in our redis client
+    """
+    redis_client.set(key_name, value)
+    
+    
+def get_key(key_name):
+    """
+    gets a key value pair from our redis client
+    """
+    return redis_client.get(key_name)
     
     
         

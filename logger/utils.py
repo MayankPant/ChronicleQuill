@@ -3,6 +3,14 @@ from asgiref.sync import async_to_sync
 
 
 LOG_DB_NAME: str = 'logdb'
+"""
+Log DB name is the name of our shared redis list.
+"""
+CONSUMER_TOGGLE_NAME: str = 'consumer_toggle'
+"""
+CONSUMER_TOGGLE is used to toggle the service specific consumer in the run_websocket_consumer
+management command.
+"""
     
         
 

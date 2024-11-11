@@ -2,9 +2,9 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 import asyncio
-from .utils import LOG_DB_NAME
-from .LogMemory import retrieve_all
-
+from .utils import CONSUMER_TOGGLE_NAME, LOG_DB_NAME
+from .LogMemory import retrieve_all, set_key, get_key
+from . import utils
 LEVEL: str = 'debug'
 LINES: str = 'all'
 SERVICE: str = 'all'
@@ -26,12 +26,18 @@ class LogConsumer(AsyncWebsocketConsumer):
             self.channel_name
         )
         print(f'Websocket disconnection successfull')
+        
+    async def receive(self, text_data=None, bytes_data=None):
+        data = json.loads(text_data)
+        if(data['event'] == 'CONSUMER_TOGGLE'):
+            set_key(CONSUMER_TOGGLE_NAME, data['value'])
+            print(f'\n\n\n\n\n\nCONSUMER_TOGGLE: {get_key(CONSUMER_TOGGLE_NAME)}')
 
     
      # Handler for messages received from the channel layer
     async def logging_message(self, event):
         # Send message to WebSocket
-        print(f'triggered message handler: {event}')
+        print(f'Triggered message handler: {event}')
         await self.send(text_data=json.dumps(event))
 
 
@@ -62,8 +68,11 @@ class ServiceLogConsumer(AsyncWebsocketConsumer):
             LEVEL = data['level']
             LINES = data['lines']
             SERVICE = data['service']
-            print(f'Global variables Level: {LEVEL}, lines: {LINES}, service: {SERVICE} ')
-
+            print(f'Global variables Level: {LEVEL}, lines: {LINES}, service: {SERVICE}')
+        
+        if(data['event'] == 'CONSUMER_TOGGLE'):
+            set_key(CONSUMER_TOGGLE_NAME, data['value'])
+            print(f'\n\n\n\n\n\nCONSUMER_TOGGLE: {get_key(CONSUMER_TOGGLE_NAME)}')
     
     # sends service specific logs to the frontend
     async def send_log_batches(self, event):
