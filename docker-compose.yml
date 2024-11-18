@@ -10,8 +10,14 @@ services:
       - redis
       - rabbitmq
       - postgres
+      - chroniclequill-management
     entrypoint: ['./entrypoint.sh']
     container_name: chroniclequill
+  chroniclequill-management:
+    image: mayankpant4512/chroniclequill:latest
+    container_name: chroniclemanagement
+    ports:
+      - '3000:80'
   postgres:
     image: postgres:latest 
     container_name: postgres_container  # Optional, name for the container
