@@ -28,7 +28,7 @@ deploy_job:
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$DEPLOYMENT_SEVER_IP "
         docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD &&
         docker ps -aq | xargs -r docker stop && docker ps -aq | xargs -r docker rm &&
-        docker run -d -p $IMAGE_NAME:$IMAGE_TAG"
+        docker run -d  $IMAGE_NAME:$IMAGE_TAG"
 
 
 
