@@ -25,7 +25,7 @@ deploy_job:
   before_script:
     - chmod 400 $SSH_KEY
   script:
-    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$DEPLOYEMT_SERVER_IP '
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$DEPLOYMENT_SEVER_IP '
       docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD &&
       docker ps -aq | xargs -r docker stop && docker ps -aq | xargs -r docker rm &&
       docker run -d -p $IMAGE_NAME:$IMAGE_TAG'
