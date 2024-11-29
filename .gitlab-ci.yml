@@ -2,6 +2,7 @@
 variables:
   IMAGE_NAME: mayankpant4512/chroniclequill
   IMAGE_TAG: 1.0.0
+  DEPLOYMENT_SEVER_IP: 140.245.255.247
 stages:          # List of stages for jobs, and their order of execution
   - build
   - deploy
@@ -18,5 +19,15 @@ build-job:       # This job runs in the build stage, which runs first.
   script:
     - docker build -t $IMAGE_NAME:$IMAGE_TAG .
     - docker push $IMAGE_NAME:$IMAGE_TAG
+
+deploy_job:
+  stage: deploy
+  before_script:
+    - chmod 400 $SSH_KEY
+  script:
+    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@$DEPLOYEMT_SERVER_IP '
+      docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD &&
+      docker ps -aq | xargs -r docker stop && docker ps -aq | xargs -r docker rm &&
+      docker run -d -p $IMAGE_NAME:$IMAGE_TAG'
 
 
