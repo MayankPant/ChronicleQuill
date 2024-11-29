@@ -28,4 +28,4 @@ RUN chmod +x entrypoint.sh
 #Expose port 8001
 EXPOSE 8001
 
-ENTRYPOINT [ "entrypoint.sh" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
