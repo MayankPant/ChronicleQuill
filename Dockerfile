@@ -20,12 +20,14 @@ RUN pip3 freeze > requirements.txt
 # copy application code
 COPY . .
 
-COPY entrypoint.sh ./
+COPY entrypoint.sh /usr/src/app/entrypoint.sh
 
 # Ensuring the entrypoint script is executable
 RUN chmod +x entrypoint.sh
 
+
 #Expose port 8001
 EXPOSE 8001
 
-ENTRYPOINT [ "./entrypoint.sh" ]
+ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+
